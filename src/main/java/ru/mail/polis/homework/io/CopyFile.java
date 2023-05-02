@@ -43,15 +43,15 @@ public class CopyFile {
     private static void copyDirectory(Path source, Path dest) throws IOException {
         if (Files.isRegularFile(source)) {
             copyFile(source, dest);
-        } else {
-            if (Files.notExists(dest)) {
-                Files.createDirectory(dest);
-            }
+            return;
+        }
+        if (Files.notExists(dest)) {
+            Files.createDirectory(dest);
+        }
 
-            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(source)) {
-                for (Path directory : directoryStream) {
-                    copyDirectory(directory, dest.resolve(directory.getFileName()));
-                }
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(source)) {
+            for (Path directory : directoryStream) {
+                copyDirectory(directory, dest.resolve(directory.getFileName()));
             }
         }
     }
